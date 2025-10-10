@@ -24,3 +24,10 @@ stats.html
 # Misc
 .DS_Store
 .history
+
+# Environment variables
+.env
+.env.development
+.env.production
+.env.local
+.env.*.local
