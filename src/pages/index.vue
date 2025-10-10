@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { showToast } from 'vant'
+import ProductCard from '@/components/ProductCard/index.vue'
+
+interface Product {
+  id: number
+  name: string
+  price: number
+  image: string
+}
 
 // 搜索关键词
 const searchValue = ref('')
@@ -101,8 +109,8 @@ function onSearch() {
 }
 
 // 产品点击
-function onProductClick() {
-  showToast('立即开通')
+function onProductClick(product: Product) {
+  showToast(`查看：${product.name}`)
 }
 </script>
 
@@ -140,24 +148,12 @@ function onProductClick() {
     <!-- 产品列表 -->
     <div class="products-section">
       <div class="products-grid">
-        <div v-for="product in products" :key="product.id" class="product-card" @click="onProductClick">
-          <div class="product-image">
-            <van-image
-              :src="product.image"
-              :alt="product.name"
-              fit="cover"
-            />
-          </div>
-          <div class="product-info">
-            <div class="product-name">
-              {{ product.name }}
-            </div>
-            <div class="product-price">
-              <span class="price-symbol">¥</span>
-              <span class="price-value">{{ product.price }}</span>
-            </div>
-          </div>
-        </div>
+        <ProductCard
+          v-for="product in products"
+          :key="product.id"
+          :product="product"
+          @click="onProductClick"
+        />
       </div>
     </div>
     <van-back-top right="10vw" bottom="10vh" />
@@ -209,73 +205,6 @@ function onProductClick() {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-  }
-
-  .product-card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:active {
-      transform: scale(0.98);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-    }
-
-    .product-image {
-      width: 100%;
-      aspect-ratio: 1;
-      overflow: hidden;
-      background: #f7f8fa;
-
-      :deep(.van-image) {
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .product-info {
-      padding: 12px;
-
-      .product-name {
-        font-size: 14px;
-        color: #323233;
-        margin-bottom: 8px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        line-height: 1.4;
-        min-height: 40px;
-      }
-
-      .product-price {
-        display: flex;
-        align-items: baseline;
-        color: #ee0a24;
-        font-weight: bold;
-
-        .price-symbol {
-          font-size: 14px;
-          margin-right: 2px;
-        }
-
-        .price-value {
-          font-size: 20px;
-        }
-      }
-    }
   }
 }
 </style>
