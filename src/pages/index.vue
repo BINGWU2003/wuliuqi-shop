@@ -37,7 +37,7 @@ const banners = [
 const products = [
   {
     id: 1,
-    name: '王者荣耀-满V账号',
+    name: '王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号',
     price: 888,
     image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
   },
