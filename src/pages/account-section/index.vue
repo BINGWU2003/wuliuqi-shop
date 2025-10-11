@@ -29,22 +29,22 @@ function handleGameClick(_game: GameItem) {
       游戏账号专区
     </div>
 
-    <div class="game-grid">
-      <div
+    <van-grid :column-num="4" :border="false" :gutter="12" style="padding-left: 0;">
+      <van-grid-item
         v-for="game in gameList"
         :key="game.id"
-        class="game-item"
-        :style="{ '--game-color': game.color }"
         @click="handleGameClick(game)"
       >
-        <div class="game-icon">
-          {{ game.icon }}
-        </div>
-        <div class="game-name">
-          {{ game.name }}
-        </div>
-      </div>
-    </div>
+        <template #icon>
+          <div class="game-icon" :style="{ background: game.color }">
+            {{ game.icon }}
+          </div>
+        </template>
+        <template #text>
+          <span class="game-name">{{ game.name }}</span>
+        </template>
+      </van-grid-item>
+    </van-grid>
   </div>
 </template>
 
@@ -67,69 +67,38 @@ function handleGameClick(_game: GameItem) {
   color: #323233;
 }
 
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 0;
-}
-
-.game-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+:deep(.van-grid-item__content) {
+  padding: 16px 8px;
   background: white;
   border-radius: 12px;
-  padding: 16px 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  }
+  transition: all 0.3s ease;
 
   &:active {
-    transform: translateY(-2px);
+    transform: scale(0.95);
   }
 }
 
 .game-icon {
   font-size: 36px;
-  margin-bottom: 8px;
   width: 60px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--game-color);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto 8px;
 }
 
 .game-name {
   font-size: 12px;
   color: #646566;
-  text-align: center;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
 }
 
 /* 响应式设计 - 移动端优化 */
 @media (max-width: 768px) {
-  .game-grid {
-    gap: 10px;
-  }
-
-  .game-item {
-    padding: 12px 6px;
-  }
-
   .game-icon {
     font-size: 28px;
     width: 50px;
@@ -151,11 +120,7 @@ function handleGameClick(_game: GameItem) {
     margin-bottom: 16px;
   }
 
-  .game-grid {
-    gap: 8px;
-  }
-
-  .game-item {
+  :deep(.van-grid-item__content) {
     padding: 10px 4px;
     border-radius: 8px;
   }
