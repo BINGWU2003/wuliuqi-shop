@@ -25,6 +25,7 @@ function handleClick(product: Product) {
       <van-image
         :src="product.image"
         :alt="product.name"
+        lazy-load
         fit="cover"
       />
     </div>
