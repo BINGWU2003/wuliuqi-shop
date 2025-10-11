@@ -33,8 +33,8 @@ const banners = [
   },
 ]
 
-// 产品列表
-const products = [
+// 模拟产品数据
+const mockProducts = [
   {
     id: 1,
     name: '王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号',
@@ -83,25 +83,53 @@ const products = [
     price: 999,
     image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
   },
-  {
-    id: 9,
-    name: 'CF穿越火线-神器',
-    price: 999,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 10,
-    name: 'CF穿越火线-神器',
-    price: 999,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 11,
-    name: 'CF穿越火线-神器',
-    price: 999,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
 ]
+
+// 产品列表
+const products = ref<Product[]>([])
+const loading = ref(false)
+const finished = ref(false)
+const refreshing = ref(false)
+
+// 加载产品数据
+function onLoad() {
+  loading.value = true
+
+  // 模拟异步加载
+  setTimeout(() => {
+    const currentLength = products.value.length
+    // 每次加载8个产品
+    for (let i = 0; i < 8; i++) {
+      const mockIndex = i % mockProducts.length
+      products.value.push({
+        ...mockProducts[mockIndex],
+        id: currentLength + i + 1,
+      })
+    }
+
+    loading.value = false
+
+    // 模拟数据加载完成（加载到40个产品后停止）
+    if (products.value.length >= 40) {
+      finished.value = true
+    }
+  }, 500)
+}
+
+// 下拉刷新
+function onRefresh() {
+  // 清空列表数据
+  finished.value = false
+  loading.value = true
+
+  // 模拟刷新
+  setTimeout(() => {
+    products.value = []
+    refreshing.value = false
+    // 重新加载第一页数据
+    onLoad()
+  }, 1000)
+}
 
 // 搜索处理
 function onSearch() {
@@ -147,14 +175,23 @@ function onProductClick(product: Product) {
 
     <!-- 产品列表 -->
     <div class="products-section">
-      <div class="products-grid">
-        <ProductCard
-          v-for="product in products"
-          :key="product.id"
-          :product="product"
-          @click="onProductClick"
-        />
-      </div>
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+        <van-list
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+        >
+          <div class="products-grid">
+            <ProductCard
+              v-for="product in products"
+              :key="product.id"
+              :product="product"
+              @click="onProductClick"
+            />
+          </div>
+        </van-list>
+      </van-pull-refresh>
     </div>
     <van-back-top right="10vw" bottom="10vh" />
   </div>
