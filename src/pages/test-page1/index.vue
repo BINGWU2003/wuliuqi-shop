@@ -15,13 +15,13 @@ const { show, showActionSheet, actionSheetActions, onActionSelect } = useImagePr
   longPressActions: [
     {
       name: '保存图片',
-      callback: (image, index) => {
+      callback: (_image, index) => {
         showToast(`保存图片 ${index + 1}`)
       },
     },
     {
       name: '分享图片',
-      callback: (image, index) => {
+      callback: (_image, index) => {
         showToast(`分享图片 ${index + 1}`)
       },
     },
