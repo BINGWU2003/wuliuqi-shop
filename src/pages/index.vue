@@ -55,7 +55,7 @@ const totalPages = ref(0)
 function convertToProduct(account: CodmAccount): Product {
   return {
     id: account.id,
-    name: account.title,
+    name: `[${account.serial_number}]${account.title}`,
     price: account.price,
     image: account.images?.[0] || '',
   }
