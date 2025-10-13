@@ -105,5 +105,5 @@ export async function addWatermarkToMultipleImages(
   options: WatermarkOptions = {},
 ): Promise<string[]> {
   const promises = imageUrls.map(url => addWatermarkToImage(url, options))
-  return Promise.all(promises)
+  return await Promise.all(promises)
 }

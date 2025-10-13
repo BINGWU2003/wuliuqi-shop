@@ -5,6 +5,7 @@ import ProductCard from '@/components/ProductCard/index.vue'
 import { getCarousel } from '@/api/carousel'
 import { getCodmAccountList } from '@/api/codm-account'
 import type { CodmAccount } from '@/api/codm-account'
+import { useRouter } from 'vue-router'
 
 interface Product {
   id: number
@@ -20,6 +21,7 @@ interface ImageItem {
 }
 
 const CAROUSEL_NAME = 'home_ads'
+const router = useRouter()
 
 // 搜索关键词
 const searchValue = ref('')
@@ -145,8 +147,12 @@ async function onSearch() {
 
 // 产品点击
 function onProductClick(product: Product) {
-  showToast(`查看：${product.name}`)
-  // TODO: 跳转到产品详情页
+  router.push({
+    path: '/codm-account-info',
+    query: {
+      id: product.id,
+    },
+  })
 }
 
 // 监听分类切换

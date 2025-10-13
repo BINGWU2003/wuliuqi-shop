@@ -19,7 +19,8 @@
     "Settings": "⚙️ Settings",
     "404": "⚠️ Page 404",
     "Undefined": "🤷 Undefined title",
-    "AccountSection": "ACCOUNT SECTION"
+    "AccountSection": "ACCOUNT SECTION",
+    "CodmAccountInfo": "CODM ACCOUNT INFO"
   },
 
   "tabbar": {

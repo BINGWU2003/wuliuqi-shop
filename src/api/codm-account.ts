@@ -35,3 +35,8 @@ export function getCodmAccountList(params?: {
 }): Promise<any> {
   return request.get('/api/codm-accounts', { params })
 }
+
+// 获取账号列表
+export function getCodmAccountInfo(id: number): Promise<any> {
+  return request.get(`/api/codm-accounts/${id}`)
+}

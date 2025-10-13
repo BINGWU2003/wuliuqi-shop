@@ -22,6 +22,7 @@ declare module 'vue-router/auto-routes' {
     '404': RouteRecordInfo<'404', '/:all(.*)', { all: ParamValue<true> }, { all: ParamValue<false> }>,
     'AccountSection': RouteRecordInfo<'AccountSection', '/account-section', Record<never, never>, Record<never, never>>,
     'Charts': RouteRecordInfo<'Charts', '/charts', Record<never, never>, Record<never, never>>,
+    'CodmAccountInfo': RouteRecordInfo<'CodmAccountInfo', '/codm-account-info', Record<never, never>, Record<never, never>>,
     'Counter': RouteRecordInfo<'Counter', '/counter', Record<never, never>, Record<never, never>>,
     'ForgotPassword': RouteRecordInfo<'ForgotPassword', '/forgot-password', Record<never, never>, Record<never, never>>,
     'KeepAlive': RouteRecordInfo<'KeepAlive', '/keepalive', Record<never, never>, Record<never, never>>,
@@ -61,6 +62,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/charts/index.vue': {
       routes: 'Charts'
+      views: never
+    }
+    'src/pages/codm-account-info/index.vue': {
+      routes: 'CodmAccountInfo'
       views: never
     }
     'src/pages/counter/index.vue': {
