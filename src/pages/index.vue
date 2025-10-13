@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { showToast } from 'vant'
 import ProductCard from '@/components/ProductCard/index.vue'
+import { getCarousel } from '@/api/Carousel'
+import { getCodmAccountList } from '@/api/codm-account'
+import type { CodmAccount } from '@/api/codm-account'
 
 interface Product {
   id: number
@@ -10,80 +13,32 @@ interface Product {
   image: string
 }
 
+interface ImageItem {
+  sort_order: number
+  url: string
+  link_url?: string
+}
+
+const CAROUSEL_NAME = 'home_ads'
+
 // 搜索关键词
 const searchValue = ref('')
 
 // 当前选中的分类
 const activeCategory = ref(0)
 
-// 分类列表
-const categories = ['1~1000元', '1001~2000元', '2001~3000元', '3001~4000元', '4001~5000元']
+// 分类列表 - 价格区间
+const priceRanges = [
+  { label: '全部', min: 0, max: 0 },
+  { label: '0~500元', min: 0, max: 500 },
+  { label: '501~1000元', min: 501, max: 1000 },
+  { label: '1001~2000元', min: 1001, max: 2000 },
+  { label: '2001~5000元', min: 2001, max: 5000 },
+  { label: '5000元以上', min: 5001, max: 999999 },
+]
 
 // 轮播图数据
-const banners = [
-  {
-    id: 1,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-    title: '运营商官方正品',
-  },
-  {
-    id: 2,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-    title: '遥遥领先',
-  },
-]
-
-// 模拟产品数据
-const mockProducts = [
-  {
-    id: 1,
-    name: '王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号王者荣耀-满V账号',
-    price: 888,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 2,
-    name: '原神-五星账号',
-    price: 1288,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 3,
-    name: '和平精英-稀有皮肤',
-    price: 666,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 4,
-    name: '英雄联盟-黑金号',
-    price: 2588,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 5,
-    name: '崩坏星穹铁道',
-    price: 1688,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 6,
-    name: 'DNF-天空套装',
-    price: 3288,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 7,
-    name: '使命召唤-满级号',
-    price: 1888,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-  {
-    id: 8,
-    name: 'CF穿越火线-神器',
-    price: 999,
-    image: 'https://wuliuqi-1318477772.cos.ap-guangzhou.myqcloud.com/231535-1511018135206b.jpg',
-  },
-]
+const banners = ref<ImageItem[]>([])
 
 // 产品列表
 const products = ref<Product[]>([])
@@ -91,69 +46,138 @@ const loading = ref(false)
 const finished = ref(false)
 const refreshing = ref(false)
 
-// 加载产品数据
-function onLoad() {
-  loading.value = true
+// 分页信息
+const currentPage = ref(1)
+const pageSize = ref(10)
+const totalPages = ref(0)
 
-  // 模拟异步加载
-  setTimeout(() => {
-    const currentLength = products.value.length
-    // 每次加载8个产品
-    for (let i = 0; i < 8; i++) {
-      const mockIndex = i % mockProducts.length
-      products.value.push({
-        ...mockProducts[mockIndex],
-        id: currentLength + i + 1,
-      })
+// 转换 CODM 账号数据为产品格式
+function convertToProduct(account: CodmAccount): Product {
+  return {
+    id: account.id,
+    name: account.title,
+    price: account.price,
+    image: account.images?.[0] || '',
+  }
+}
+
+// 加载产品数据
+async function onLoad() {
+  try {
+    const selectedRange = priceRanges[activeCategory.value]
+    const params: any = {
+      page: currentPage.value,
+      limit: pageSize.value,
+      status: 1, // 只显示上架的商品
     }
 
-    loading.value = false
+    // 添加搜索关键词
+    if (searchValue.value.trim()) {
+      params.keyword = searchValue.value.trim()
+    }
 
-    // 模拟数据加载完成（加载到40个产品后停止）
-    if (products.value.length >= 40) {
+    // 添加价格区间筛选（全部分类除外）
+    if (selectedRange.min > 0 || selectedRange.max > 0) {
+      params.min_price = selectedRange.min
+      params.max_price = selectedRange.max
+    }
+
+    const res = await getCodmAccountList(params)
+
+    if (res?.data?.list && Array.isArray(res.data.list)) {
+      const newProducts = res.data.list.map(convertToProduct)
+
+      if (currentPage.value === 1) {
+        products.value = newProducts
+      }
+      else {
+        products.value.push(...newProducts)
+      }
+
+      // 更新分页信息
+      if (res.data.pagination) {
+        totalPages.value = res.data.pagination.totalPages
+        currentPage.value = res.data.pagination.page
+      }
+
+      // 判断是否加载完成
+      if (currentPage.value >= totalPages.value) {
+        finished.value = true
+      }
+      else {
+        currentPage.value++
+      }
+    }
+    else {
       finished.value = true
     }
-  }, 500)
+  }
+  catch (error) {
+    console.error('加载产品失败:', error)
+    showToast('加载失败，请稍后重试')
+    finished.value = true
+  }
 }
 
 // 下拉刷新
-function onRefresh() {
-  // 清空列表数据
+async function onRefresh() {
   finished.value = false
-  loading.value = true
-
-  // 模拟刷新
-  setTimeout(() => {
-    products.value = []
-    refreshing.value = false
-    // 重新加载第一页数据
-    onLoad()
-  }, 1000)
+  currentPage.value = 1
+  products.value = []
+  await onLoad()
+  refreshing.value = false
 }
 
 // 搜索处理
-function onSearch() {
-  showToast(`搜索：${searchValue.value}`)
+async function onSearch() {
+  if (!searchValue.value.trim()) {
+    showToast('请输入搜索关键词')
+    return
+  }
+
+  // 重置列表
+  currentPage.value = 1
+  products.value = []
+  finished.value = false
+
+  await onLoad()
 }
 
 // 产品点击
 function onProductClick(product: Product) {
   showToast(`查看：${product.name}`)
+  // TODO: 跳转到产品详情页
 }
+
+// 监听分类切换
+watch(activeCategory, () => {
+  currentPage.value = 1
+  products.value = []
+  finished.value = false
+  onLoad()
+})
+
+onMounted(async () => {
+  // 加载轮播图
+  const res = await getCarousel(CAROUSEL_NAME)
+  if (res?.data?.items && Array.isArray(res.data.items)) {
+    banners.value = res.data.items.sort((a: ImageItem, b: ImageItem) => a.sort_order - b.sort_order)
+  }
+})
 </script>
 
 <template>
   <div class="home-page">
     <!-- 轮播图 -->
     <van-swipe class="banner-swipe" :autoplay="3000" indicator-color="#fff" lazy-render>
-      <van-swipe-item v-for="banner in banners" :key="banner.id">
-        <img :src="banner.image">
+      <van-swipe-item v-for="banner in banners" :key="banner.url">
+        <img :src="banner.url">
       </van-swipe-item>
     </van-swipe>
 
     <!-- 分类标签 -->
     <van-tabs v-model:active="activeCategory" class="category-tabs" color="#1989fa" swipeable :ellipsis="false">
-      <van-tab v-for="(category, index) in categories" :key="index" :title="category" />
+      <van-tab v-for="(range, index) in priceRanges" :key="index" :title="range.label" />
     </van-tabs>
 
     <!-- 搜索框 -->
