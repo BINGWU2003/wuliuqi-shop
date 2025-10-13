@@ -194,7 +194,7 @@ function triggerLongPress() {
 }
 
 // ActionSheet 选择
-function onActionSelect(item: any, index: number) {
+function onActionSelect(_item, index: number) {
   const action = props.longPressActions[index]
   if (action) {
     action.callback(currentImage.value, currentIndex.value)
