@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { showToast } from 'vant'
 import ProductCard from '@/components/ProductCard/index.vue'
-import { getCarousel } from '@/api/Carousel'
+import { getCarousel } from '@/api/carousel'
 import { getCodmAccountList } from '@/api/codm-account'
 import type { CodmAccount } from '@/api/codm-account'
 
