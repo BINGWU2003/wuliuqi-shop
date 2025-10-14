@@ -14,9 +14,9 @@ const accountInfo = ref<CodmAccount | null>(null)
 const imagePreviewRef = ref()
 // 水印配置
 const watermarkOptions: WatermarkOptions = {
-  text: '© 五六七手游店',
-  position: 'lowerRight',
-  fontSize: '48px',
+  text: '© 567手游店',
+  position: 'center',
+  fontSize: '100px',
   fontFamily: 'sans-serif',
   color: '#fff',
   opacity: 0.5,
