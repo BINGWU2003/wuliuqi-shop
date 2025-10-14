@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { showToast } from 'vant'
 import ProductCard from '@/components/ProductCard/index.vue'
-import { getCarousel } from '@/api/carousel'
 import { getCodmAccountList } from '@/api/codm-account'
 import type { CodmAccount } from '@/api/codm-account'
 import { useRouter } from 'vue-router'
@@ -14,13 +13,6 @@ interface Product {
   image: string
 }
 
-interface ImageItem {
-  sort_order: number
-  url: string
-  link_url?: string
-}
-
-const CAROUSEL_NAME = 'home_ads'
 const router = useRouter()
 
 // 搜索关键词
@@ -38,9 +30,6 @@ const priceRanges = [
   { label: '2001~5000元', min: 2001, max: 5000 },
   { label: '5000元以上', min: 5001, max: 999999 },
 ]
-
-// 轮播图数据
-const banners = ref<ImageItem[]>([])
 
 // 产品列表
 const products = ref<Product[]>([])
@@ -162,25 +151,10 @@ watch(activeCategory, () => {
   finished.value = false
   onLoad()
 })
-
-onMounted(async () => {
-  // 加载轮播图
-  const res = await getCarousel(CAROUSEL_NAME)
-  if (res?.data?.items && Array.isArray(res.data.items)) {
-    banners.value = res.data.items.sort((a: ImageItem, b: ImageItem) => a.sort_order - b.sort_order)
-  }
-})
 </script>
 
 <template>
   <div class="home-page">
-    <!-- 轮播图 -->
-    <van-swipe class="banner-swipe" :autoplay="3000" indicator-color="#fff" lazy-render>
-      <van-swipe-item v-for="banner in banners" :key="banner.url">
-        <img :src="banner.url">
-      </van-swipe-item>
-    </van-swipe>
-
     <!-- 分类标签 -->
     <van-tabs v-model:active="activeCategory" class="category-tabs" color="#1989fa" swipeable :ellipsis="false">
       <van-tab v-for="(range, index) in priceRanges" :key="index" :title="range.label" />
@@ -278,6 +252,6 @@ onMounted(async () => {
 
 <route lang="json5">
 {
-  name: 'Home'
+  name: 'CodmAccountPage'
 }
 </route>

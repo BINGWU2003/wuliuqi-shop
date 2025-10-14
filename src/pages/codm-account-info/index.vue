@@ -102,7 +102,7 @@ onMounted(() => {
           <span class="price">¥{{ accountInfo.price }}</span>
         </div>
 
-        <div class="info-item">
+        <div class="info-item" v-if="accountInfo.xianyu_url">
           <label>闲鱼链接:</label>
           <a :href="accountInfo.xianyu_url" target="_blank" class="xianyu-link">
             查看闲鱼商品
@@ -281,6 +281,9 @@ onMounted(() => {
           padding: 15px;
           border-radius: 6px;
           border-left: 4px solid #3182ce;
+          word-break: break-all;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
       }
     }

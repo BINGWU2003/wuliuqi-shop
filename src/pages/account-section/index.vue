@@ -1,25 +1,30 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 interface GameItem {
   id: number
   name: string
   icon: string
   color: string
+  path: string
 }
 
 const gameList = ref<GameItem[]>([
-  { id: 1, name: '王者荣耀', icon: '👑', color: '#FF6B6B' },
-  { id: 2, name: '和平精英', icon: '🎮', color: '#4ECDC4' },
-  { id: 3, name: '原神', icon: '⚔️', color: '#95E1D3' },
-  { id: 4, name: '英雄联盟', icon: '🎯', color: '#FFE66D' },
-  { id: 5, name: '穿越火线', icon: '🔫', color: '#FF8C42' },
-  { id: 6, name: '梦幻西游', icon: '🐉', color: '#A8E6CF' },
-  { id: 7, name: 'DNF', icon: '⚡', color: '#FFD93D' },
-  { id: 8, name: '绝地求生', icon: '🏆', color: '#6BCF7F' },
+  // { id: 1, name: '王者荣耀', icon: '👑', color: '#FF6B6B' },
+  // { id: 2, name: '和平精英', icon: '🎮', color: '#4ECDC4' },
+  // { id: 3, name: '原神', icon: '⚔️', color: '#95E1D3' },
+  // { id: 4, name: '英雄联盟', icon: '🎯', color: '#FFE66D' },
+  { id: 5, name: 'CODM', icon: '🔫', color: '#FF8C42', path: '/codm-account-page' },
+  // { id: 6, name: '梦幻西游', icon: '🐉', color: '#A8E6CF' },
+  // { id: 7, name: 'DNF', icon: '⚡', color: '#FFD93D' },
+  // { id: 8, name: '绝地求生', icon: '🏆', color: '#6BCF7F' },
 ])
 
-function handleGameClick(_game: GameItem) {
+function handleGameClick(path: string) {
   // 跳转功能待实现
-  // TODO: 实现游戏详情页跳转
+  router.push(path)
 }
 </script>
 
@@ -33,7 +38,7 @@ function handleGameClick(_game: GameItem) {
       <van-grid-item
         v-for="game in gameList"
         :key="game.id"
-        @click="handleGameClick(game)"
+        @click="handleGameClick(game.path)"
       >
         <template #icon>
           <div class="game-icon" :style="{ background: game.color }">
