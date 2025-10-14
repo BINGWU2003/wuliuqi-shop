@@ -33,7 +33,7 @@ export function getCodmAccountList(params?: {
   min_price?: number
   max_price?: number
 }): Promise<any> {
-  return request.get('/api/codm-accounts', { params })
+  return request.get('/api/codm-accounts/app', { params })
 }
 
 // 获取账号列表
