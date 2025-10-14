@@ -212,7 +212,7 @@ defineExpose({
   <teleport to="body">
     <!-- 预览遮罩层 -->
     <transition name="fade">
-      <div v-if="visible" class="image-preview-overlay" @click="close">
+      <div v-if="visible" class="image-preview-overlay">
         <!-- 关闭按钮 -->
         <div v-if="closeable" class="close-btn" @click.stop="close">
           <van-icon name="cross" size="24" color="#fff" />
@@ -226,7 +226,7 @@ defineExpose({
         <!-- 图片容器 -->
         <div
           class="image-container"
-          @click.stop
+          @click.stop="close"
           @touchstart="handleTouchStart"
           @touchmove="handleTouchMove"
           @touchend="handleTouchEnd"
