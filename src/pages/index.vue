@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { showToast } from 'vant'
+import { showImagePreview, showToast } from 'vant'
 import ProductCard from '@/components/ProductCard/index.vue'
 import { getCarousel } from '@/api/carousel'
 import { getCodmAccountList } from '@/api/codm-account'
@@ -170,13 +170,20 @@ onMounted(async () => {
     banners.value = res.data.items.sort((a: ImageItem, b: ImageItem) => a.sort_order - b.sort_order)
   }
 })
+
+function onBannerClick(index: number) {
+  showImagePreview({
+    images: banners.value.map(banner => banner.url),
+    startPosition: index,
+  })
+}
 </script>
 
 <template>
   <div class="home-page">
     <!-- 轮播图 -->
     <van-swipe class="banner-swipe" :autoplay="3000" indicator-color="#fff" lazy-render>
-      <van-swipe-item v-for="banner in banners" :key="banner.url">
+      <van-swipe-item v-for="(banner, index) in banners" :key="banner.url" @click="onBannerClick(index)">
         <img :src="banner.url">
       </van-swipe-item>
     </van-swipe>
