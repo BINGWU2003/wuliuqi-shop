@@ -244,7 +244,6 @@ function onBannerClick(index: number) {
 .banner-swipe {
   border-radius: 8px;
   width: 100%;
-  height: 150px;
 }
 
 .category-tabs {
