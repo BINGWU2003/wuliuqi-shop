@@ -20,7 +20,8 @@
     "404": "⚠️ 404 页面",
     "Undefined": "🤷 未定义标题",
     "AccountSection": " 账号专区",
-    "CodmAccountInfo": "CODM 账号详情"
+    "CodmAccountInfo": "CODM 账号详情",
+    "CodmAccountPage": "CODM 账号列表"
   },
 
   "tabbar": {
