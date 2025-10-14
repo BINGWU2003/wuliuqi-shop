@@ -102,7 +102,7 @@ onMounted(() => {
           <span class="price">¥{{ accountInfo.price }}</span>
         </div>
 
-        <div class="info-item" v-if="accountInfo.xianyu_url">
+        <div v-if="accountInfo.xianyu_url" class="info-item">
           <label>闲鱼链接:</label>
           <a :href="accountInfo.xianyu_url" target="_blank" class="xianyu-link">
             查看闲鱼商品
@@ -142,6 +142,19 @@ onMounted(() => {
               lazy-load
             />
           </div>
+        </div>
+      </div>
+
+      <!-- 免责声明 -->
+      <div class="disclaimer-section">
+        <h3 class="disclaimer-title">
+          ⚠️ 重要提示
+        </h3>
+        <div class="disclaimer-content">
+          <p>1. 购买可以点击链接跳入咸鱼app直接联系（认准店铺：567手游店），私下购买认准微信号：wlq16680802181，防止被骗，如走其他被骗概不负责！</p>
+          <p>2. 购买账号支持分期（首付50%以上，不换绑先上号游玩），预定服务等。</p>
+          <p>3. 国家法律规定，未成年人不能参与虚拟物品交易。</p>
+          <p>4. 平台提供的数字化商品根据商品性质不支持七天无理由退货及三包服务。</p>
         </div>
       </div>
 
@@ -284,6 +297,39 @@ onMounted(() => {
           word-break: break-all;
           word-wrap: break-word;
           overflow-wrap: break-word;
+        }
+      }
+    }
+
+    .disclaimer-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+      border-radius: 8px;
+      border: 1px solid #feb2b2;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+      .disclaimer-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #c53030;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .disclaimer-content {
+        p {
+          font-size: 14px;
+          line-height: 1.8;
+          color: #4a5568;
+          margin-bottom: 10px;
+          padding-left: 8px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
       }
     }
