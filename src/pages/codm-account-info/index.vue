@@ -111,9 +111,7 @@ onMounted(() => {
 
         <div class="info-item description">
           <label>描述:</label>
-          <p class="describe">
-            {{ accountInfo.describe }}
-          </p>
+          <p class="describe" v-html="accountInfo.describe" />
         </div>
 
         <div class="info-item">
