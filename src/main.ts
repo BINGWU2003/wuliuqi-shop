@@ -10,6 +10,7 @@ import { i18n } from '@/utils/i18n'
 import { Lazyload } from 'vant'
 // Vant 桌面端适配
 import '@vant/touch-emulator'
+import '@/pwa'
 
 /* --------------------------------
 Vant 中有个别组件是以函数的形式提供的，
