@@ -21,13 +21,15 @@
     "Undefined": "🤷 未定义标题",
     "AccountSection": " 账号专区",
     "CodmAccountInfo": "CODM 账号详情",
-    "CodmAccountPage": "CODM 账号列表"
+    "CodmAccountPage": "CODM 账号列表",
+    "Guide": "指南"
   },
 
   "tabbar": {
     "home": "首页",
     "profile": "我的",
-    "accountSection": "账号专区"
+    "accountSection": "账号专区",
+    "guide": "指南"
   },
 
   "home": {

@@ -21,13 +21,15 @@
     "Undefined": "🤷 Undefined title",
     "AccountSection": "ACCOUNT SECTION",
     "CodmAccountInfo": "CODM ACCOUNT INFO",
-    "CodmAccountPage": "CODM ACCOUNT PAGE"
+    "CodmAccountPage": "CODM ACCOUNT PAGE",
+    "Guide": "GUIDE"
   },
 
   "tabbar": {
     "home": "HOME",
     "profile": "PROFILE",
-    "accountSection": "ACCOUNT SECTION"
+    "accountSection": "ACCOUNT SECTION",
+    "guide": "GUIDE"  
   },
 
   "home": {

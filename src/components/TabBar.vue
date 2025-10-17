@@ -26,5 +26,11 @@ const show = computed(() => {
         <div class="i-carbon:game-console" />
       </template>
     </van-tabbar-item>
+    <van-tabbar-item replace to="/guide">
+      {{ $t('tabbar.guide') }}
+      <template #icon>
+        <div class="i-carbon:book" />
+      </template>
+    </van-tabbar-item>
   </van-tabbar>
 </template>

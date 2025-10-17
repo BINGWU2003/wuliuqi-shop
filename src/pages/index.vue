@@ -118,6 +118,8 @@ async function onLoad() {
     console.error('加载产品失败:', error)
     showToast('加载失败，请稍后重试')
     finished.value = true
+  } finally {
+    loading.value = false
   }
 }
 
