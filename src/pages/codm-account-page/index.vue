@@ -6,6 +6,9 @@ import { getCodmAccountList } from '@/api/codm-account'
 import type { CodmAccount } from '@/api/codm-account'
 import { useRouter } from 'vue-router'
 
+defineOptions({
+  name: 'CodmAccountPage',
+})
 interface Product {
   id: number
   name: string
@@ -107,7 +110,8 @@ async function onLoad() {
     console.error('加载产品失败:', error)
     showToast('加载失败，请稍后重试')
     finished.value = true
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -254,6 +258,9 @@ watch(activeCategory, () => {
 
 <route lang="json5">
 {
-  name: 'CodmAccountPage'
+  name: 'CodmAccountPage',
+  meta: {
+    keepAlive: true,
+  },
 }
 </route>
